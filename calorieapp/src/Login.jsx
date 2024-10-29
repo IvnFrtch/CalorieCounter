@@ -1,0 +1,47 @@
+import React, { useState } from "react";
+
+const Login = () => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Add authentication logic here
+        if (username === "user" && password === "password") {
+        alert("Login successful!");
+        } else {
+        alert("Invalid credentials");
+        }
+    };
+  return (
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: "10px" }}>
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+          />
+        </div>
+        <div style={{ marginBottom: "10px" }}>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+          />
+        </div>
+        <button type="submit" style={{ width: "100%", padding: "10px" }}>
+          Login
+        </button>
+      </form>
+    </div>
+  );
+}
+
+
+export default Login
