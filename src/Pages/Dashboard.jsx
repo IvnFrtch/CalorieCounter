@@ -1,4 +1,3 @@
-// Dashboard.js
 import React, { useState } from 'react';
 import { Button, Typography, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import GoalModal from '../Components/GoalModal';
@@ -16,8 +15,19 @@ const Dashboard = () => {
     setCaloriesConsumed(caloriesConsumed + meal.calories);
   };
 
+  // Get current date
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
+      {/* Display current date */}
+      <Typography variant="h5" gutterBottom>{currentDate}</Typography>
+
       {/* Goal Modal */}
       <GoalModal open={isGoalModalOpen} onClose={() => setIsGoalModalOpen(false)} onSave={(goal) => setCalorieGoal(goal)} />
 
