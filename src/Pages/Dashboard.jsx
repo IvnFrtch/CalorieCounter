@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Typography, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import GoalModal from '../Components/GoalModal';
 import AddMealModal from '../Components/AddMealModal';
+import Header from '../Components/Header';
 
 const Dashboard = () => {
   const [calorieGoal, setCalorieGoal] = useState(null);
@@ -24,7 +25,10 @@ const Dashboard = () => {
   });
 
   return (
+    <>
+    <div><Header/></div>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
+      
       {/* Display current date */}
       <Typography variant="h5" gutterBottom>{currentDate}</Typography>
 
@@ -83,6 +87,8 @@ const Dashboard = () => {
         </Box>
       )}
     </div>
+    </>
+    
   );
 };
 
