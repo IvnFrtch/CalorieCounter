@@ -5,6 +5,7 @@ import { auth, storage, db } from "../firebase.js"; // Import your Firebase conf
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
+import CustomSnackbar from '../Components/SnackbarComponent.jsx'
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -15,6 +16,19 @@ function Register() {
   const [errorMessage, setErrorMessage] = useState("");
   const [file, setFile] = useState(null); // State for file input
   const [successMessage, setSuccessMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+
+  const handleOpenSnackbar = (message, severity = 'info') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]); // Get the selected file
@@ -34,7 +48,7 @@ function Register() {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        setErrorMessage("Username is already taken");
+        handleOpenSnackbar('Username already taken.', 'error');
         return;
       }
       // Register the user
@@ -55,15 +69,22 @@ function Register() {
         await uploadBytes(storageRef, file); // Upload the file
       }
 
-      alert("Registration successful!");
+      handleOpenSnackbar('Registration successful!', 'success');
     } catch (error) {
-      setErrorMessage("Registration failed: " + error.message);
+      handleOpenSnackbar('Registration Succesful', 'success');
     }
   };
 
   return (
+    
     <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <h2>Register</h2>
+      <CustomSnackbar
+        open={snackbarOpen}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
       
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
       <form onSubmit={handleSubmit}>
