@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Typography, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import GoalModal from '../Components/GoalModal';
 import AddMealModal from '../Components/AddMealModal';
-import Header from '../Components/Header';
 
 const Dashboard = () => {
   const [calorieGoal, setCalorieGoal] = useState(null);
@@ -16,6 +15,13 @@ const Dashboard = () => {
     setCaloriesConsumed(caloriesConsumed + meal.calories);
   };
 
+  // Trigger alert when calories exceed the goal
+  useEffect(() => {
+    if (calorieGoal && caloriesConsumed > calorieGoal) {
+      alert('You have exceeded your calorie goal!');
+    }
+  }, [caloriesConsumed, calorieGoal]);
+
   // Get current date
   const currentDate = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
@@ -25,10 +31,7 @@ const Dashboard = () => {
   });
 
   return (
-    <>
-    <div><Header/></div>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '50px' }}>
-      
       {/* Display current date */}
       <Typography variant="h5" gutterBottom>{currentDate}</Typography>
 
@@ -87,8 +90,6 @@ const Dashboard = () => {
         </Box>
       )}
     </div>
-    </>
-    
   );
 };
 
