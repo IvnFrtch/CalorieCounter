@@ -7,6 +7,7 @@ const AddMealModal = ({ open, onClose, onAddMeal }) => {
   const [calories, setCalories] = useState('');
 
   const handleAddMeal = () => {
+
     onAddMeal({
       description,
       weight: Number(weight),
@@ -32,6 +33,10 @@ const AddMealModal = ({ open, onClose, onAddMeal }) => {
         <Typography variant="h6" gutterBottom>
           Add Meal
         </Typography>
+        <form onSubmit={(e) => {
+          e.preventDefault(); // Prevents page reload
+          handleAddMeal();
+        }}>
         <TextField
           label="Description"
           fullWidth
@@ -57,10 +62,12 @@ const AddMealModal = ({ open, onClose, onAddMeal }) => {
           value={calories}
           onChange={(e) => setCalories(e.target.value)}
           margin="normal"
+          required
         />
-        <Button variant="contained" color="primary" onClick={handleAddMeal}>
+        <Button type="type" variant="contained" color="primary">
           Add Meal
         </Button>
+        </form>
       </Box>
     </Modal>
   );
