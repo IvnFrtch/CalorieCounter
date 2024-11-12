@@ -3,26 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import CustomSnackbar from '../Components/SnackbarComponent'
+import { useSnackbar } from '../SnackbarContext';
 import pushupImage from "../assets/pushup.png";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSnackbarSeverity] = useState('info');
-
-    const handleOpenSnackbar = (message, severity = 'info') => {
-      setSnackbarMessage(message);
-      setSnackbarSeverity(severity);
-      setSnackbarOpen(true);
-    };
-
-    const handleCloseSnackbar = () => {
-      setSnackbarOpen(false);
-    };
-
+    const { openSnackbar } = useSnackbar();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -34,7 +21,7 @@ const Login = () => {
         const querySnapshot = await getDocs(q);
   
         if (querySnapshot.empty) {
-          handleOpenSnackbar('Invalid Credentials', 'error');
+          openSnackbar('Invalid Credentials', 'error');
           return;
         }
   
@@ -42,21 +29,17 @@ const Login = () => {
         const userEmail = userDoc.data().email;
   
         await signInWithEmailAndPassword(auth, userEmail, password);
+
+        
+        openSnackbar(`Welcome!`, 'success');
         navigate("/dashboard"); // Redirect after login
       } catch (error) {
-        handleOpenSnackbar('Failed to Login', 'error');
+        openSnackbar('Failed to Login', 'error');
       }
     };
 
     return (
       <div style={{ display: 'flex', height: '97vh', width: '100%' }}>
-        <CustomSnackbar
-          open={snackbarOpen}
-          onClose={handleCloseSnackbar}
-          message={snackbarMessage}
-          severity={snackbarSeverity}
-        />
-
         {/* Background image */}
         <img 
           src={pushupImage} 

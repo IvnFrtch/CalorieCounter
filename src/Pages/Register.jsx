@@ -1,11 +1,10 @@
 // Register.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, storage, db } from "../firebase.js"; // Import your Firebase config
+import { auth, db } from "../firebase.js"; // Import your Firebase config
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { ref, uploadBytes } from "firebase/storage";
 import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
-import CustomSnackbar from '../Components/SnackbarComponent.jsx'
+import { useSnackbar } from '../SnackbarContext';
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -14,22 +13,9 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [file, setFile] = useState(null); // State for file input
-  const [successMessage, setSuccessMessage] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+
+  const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
-
-  const handleOpenSnackbar = (message, severity = 'info') => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +31,7 @@ function Register() {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
-        handleOpenSnackbar('Username already taken.', 'error');
+        openSnackbar('Username already taken.', 'error');
         return;
       }
       // Register the user
@@ -59,29 +45,18 @@ function Register() {
         email,
         uid: user.uid,
       });
-
-      
-
-      handleOpenSnackbar('Registration successful!', 'success');
-      const navigate = useNavigate();
+      openSnackbar('Registration successful!', 'success');
+      navigate('/');
       
     } catch (error) {
-      handleOpenSnackbar('Registration Failed', 'error');
+      openSnackbar('Registration Failed', 'error');
     }
   };
 
   return (
-    
     <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
       <h2>Register</h2>
-      <CustomSnackbar
-        open={snackbarOpen}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
-      />
-      
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "10px" }}>
           <label>Username:</label>

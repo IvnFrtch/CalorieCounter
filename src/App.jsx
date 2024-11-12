@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import './App.css'
-import Dashboard from './Pages/Dashboard';
-import Login from './Pages/Login';
+// App.js
+import React from 'react';
+import { SnackbarProvider } from './SnackbarContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './Pages/Register';
+import Login from './Pages/Login';
+import Dashboard from './Pages/Dashboard';
 
-function App() {
-
+const App = () => {
   return (
-    <>
-    <Router>
-      <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
-    </>
-  )
-}
+    <BrowserRouter>
+      <SnackbarProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </SnackbarProvider>
+    </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
