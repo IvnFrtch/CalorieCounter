@@ -1,6 +1,6 @@
 // Register.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, storage, db } from "../firebase.js"; // Import your Firebase config
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, uploadBytes } from "firebase/storage";
@@ -19,6 +19,7 @@ function Register() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
+  const navigate = useNavigate();
 
   const handleOpenSnackbar = (message, severity = 'info') => {
     setSnackbarMessage(message);
@@ -28,10 +29,6 @@ function Register() {
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
-  };
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]); // Get the selected file
   };
   
   const handleSubmit = async (e) => {
@@ -63,15 +60,13 @@ function Register() {
         uid: user.uid,
       });
 
-      // Check if a file is selected
-      if (file) {
-        const storageRef = ref(storage, `profilePictures/${user.uid}`); // Create a reference to the storage location
-        await uploadBytes(storageRef, file); // Upload the file
-      }
+      
 
       handleOpenSnackbar('Registration successful!', 'success');
+      const navigate = useNavigate();
+      
     } catch (error) {
-      handleOpenSnackbar('Registration Succesful', 'success');
+      handleOpenSnackbar('Registration Failed', 'error');
     }
   };
 
