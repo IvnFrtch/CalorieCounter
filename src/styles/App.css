@@ -1,0 +1,6 @@
+/* index.css */
+body {
+    font-family: Arial, sans-serif;
+    max-height: 100vh;
+    overflow-y: hidden;
+}

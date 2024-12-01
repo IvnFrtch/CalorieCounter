@@ -1,0 +1,24 @@
+.login_container {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.login_img_container {
+    width: 50%;
+    height: 100%;
+}
+
+.login_img {
+    width: 100%;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.login_form {
+    width: 50%;
+}
+
+.login_form_content {
+    margin: 15%;
+}

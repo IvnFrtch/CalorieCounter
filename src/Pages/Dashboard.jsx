@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { auth, db } from "../firebase.js";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+
 import GoalModal from '../Components/GoalModal';
 import AddMealModal from '../Components/AddMealModal';
 import Header from '../Components/Header';
@@ -11,12 +14,27 @@ const Dashboard = () => {
   const [isAddMealModalOpen, setIsAddMealModalOpen] = useState(false);
   const [meals, setMeals] = useState([]);
 
-  const handleAddMeal = (meal) => {
-    setMeals([...meals, meal]);
-    setCaloriesConsumed(caloriesConsumed + meal.calories);
-  };
+  // Fetch user's calorie field from Firestore
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userId = auth.currentUser.uid; // Get current user's UID
+        const userDocRef = doc(db, 'users', userId); // Reference to the user document
+        const userDoc = await getDoc(userDocRef);
 
-  // Trigger alert when calories exceed the goal
+        if (userCalories === 0) {
+          console.log("Calorie is 0");
+        } else {
+          console.log('No user data found!');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+  // Calorie exceeds goal
   useEffect(() => {
     if (calorieGoal && caloriesConsumed > calorieGoal) {
       alert('You have exceeded your calorie goal!');
@@ -30,6 +48,11 @@ const Dashboard = () => {
     month: 'long',
     day: 'numeric',
   });
+
+  const handleAddMeal = (meal) => {
+    setMeals([...meals, meal]);
+    setCaloriesConsumed(caloriesConsumed + meal.calories);
+  };
 
   return (
     <>

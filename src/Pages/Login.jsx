@@ -4,7 +4,8 @@ import { auth, db } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { useSnackbar } from '../SnackbarContext';
-import pushupImage from "../assets/pushup.png";
+import frontpage from "../assets/frontpage.jpg";
+import '../styles/Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -39,35 +40,15 @@ const Login = () => {
     };
 
     return (
-      <div style={{ display: 'flex', height: '97vh', width: '100%' }}>
-        {/* Background image */}
-        <img 
-          src={pushupImage} 
-          alt="background" 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: -1
-          }} 
-        />
+      <div className="login_container">
+        <div className="login_img_container">
+          <img className="login_img" 
+          src={frontpage} 
+          alt="background"/>
+        </div>
 
-        {/* Main content area (left side, empty to let the image show through) */}
-        <div style={{ flex: 1 }}></div>
-
-        {/* Right sidebar login form */}
-        <div style={{
-          width: '400px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          padding: '20px',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)', // Slight transparency
-          zIndex: 1 // Ensure it’s on top of the image
-        }}>
+        <div className="login_form">
+          <div className="login_form_content">
           <h2 style={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '10px' }}>Welcome back!</h2>
           <p style={{ textAlign: 'center', color: '#777', marginBottom: '20px' }}>Please enter your details</p>
 
@@ -114,7 +95,7 @@ const Login = () => {
             <button type="submit" style={{
               width: '100%',
               padding: '10px',
-              backgroundColor: '#000',
+              backgroundColor: '#91B70C',
               color: '#fff',
               border: 'none',
               borderRadius: '4px',
@@ -131,6 +112,8 @@ const Login = () => {
           <p style={{ textAlign: 'center', marginTop: '10px' }}>
             Don’t have an account? <Link to="/register" style={{ textDecoration: 'none', color: '#007bff' }}>Sign up</Link>
           </p>
+          </div>
+          
         </div>
       </div>
     );

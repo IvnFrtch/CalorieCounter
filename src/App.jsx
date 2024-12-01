@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './Pages/Register';
 import Login from './Pages/Login';
 import Dashboard from './Pages/Dashboard';
+import './styles/App.css';
 
 const App = () => {
   return (

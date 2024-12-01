@@ -13,10 +13,12 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const calorie = 0;
 
   const { openSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  
+  console.log("Authenticated user:", auth.currentUser);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -25,7 +27,6 @@ function Register() {
     }
     
     try {
-      // Step 1: Check if username already exists
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("username", "==", username));
       const querySnapshot = await getDocs(q);
@@ -34,90 +35,141 @@ function Register() {
         openSnackbar('Username already taken.', 'error');
         return;
       }
-      // Register the user
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Save username and other details to Firestore
       await setDoc(doc(db, "users", user.uid), {
         username,
         name,
         email,
+        calorie,
         uid: user.uid,
       });
       openSnackbar('Registration successful!', 'success');
       navigate('/');
       
     } catch (error) {
-      openSnackbar('Registration Failed', 'error');
+      console.error("Error during registration:", error.code, error.message);
+      openSnackbar(`Registration Failed: ${error.message}`, 'error');
     }
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2>Register</h2>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
+    <div style={styles.container}>
+      <h2 style={styles.header}>Register</h2>
+      {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <div style={styles.inputGroup}>
           <label>Username:</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
             required
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={styles.inputGroup}>
           <label>Name:</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
             required
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={styles.inputGroup}>
           <label>Email:</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
             required
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={styles.inputGroup}>
           <label>Password:</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
             required
           />
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div style={styles.inputGroup}>
           <label>Confirm Password:</label>
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={styles.input}
             required
           />
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+          {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
         </div>
-        <button type="submit" style={{ width: "100%", padding: "10px" }}>
+        <button type="submit" style={styles.button}>
           Register
         </button>
       </form>
-      <p style={{ textAlign: "center", marginTop: "10px" }}>
+      <p style={styles.footerText}>
         Already have an account? <Link to="/">Login</Link>
       </p>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "400px",
+    margin: "auto",
+    padding: "20px",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    textAlign: "center",
+  },
+  header: {
+    color: "#1976D2",
+    marginBottom: "20px",
+  },
+  errorMessage: {
+    color: "red",
+    marginBottom: "10px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  inputGroup: {
+    marginBottom: "15px",
+    width: "100%",
+  },
+  input: {
+    width: "100%",
+    padding: "10px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    marginTop: "5px",
+  },
+  button: {
+    width: "100%",
+    padding: "10px",
+    backgroundColor: "#1976D2",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+  footerText: {
+    marginTop: "10px",
+    color: "#555",
+  },
+};
 
 export default Register;
