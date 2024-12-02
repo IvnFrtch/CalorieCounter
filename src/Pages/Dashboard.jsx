@@ -10,7 +10,7 @@ import Header from '../Components/Header';
 const Dashboard = () => {
   const [calorieGoal, setCalorieGoal] = useState(null);
   const [caloriesConsumed, setCaloriesConsumed] = useState(0);
-  const [isGoalModalOpen, setIsGoalModalOpen] = useState(true);
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isAddMealModalOpen, setIsAddMealModalOpen] = useState(false);
   const [meals, setMeals] = useState([]);
 
@@ -22,8 +22,15 @@ const Dashboard = () => {
         const userDocRef = doc(db, 'users', userId); // Reference to the user document
         const userDoc = await getDoc(userDocRef);
 
-        if (userCalories === 0) {
-          console.log("Calorie is 0");
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          console.log(userData);
+          if (userData.calorieGoal == undefined){
+            setIsGoalModalOpen(true);
+          } else {
+            console.log("Calorie Goal: " + userData.calorieGoal)
+            setCalorieGoal(userData.calorieGoal);
+          }
         } else {
           console.log('No user data found!');
         }
@@ -34,6 +41,11 @@ const Dashboard = () => {
 
     fetchUserData();
   }, []);
+
+   // Handle calorie goal update after saving in the GoalModal
+   const handleSaveGoal = (newGoal) => {
+    setCalorieGoal(newGoal); // Update the calorie goal in the state
+  };
   // Calorie exceeds goal
   useEffect(() => {
     if (calorieGoal && caloriesConsumed > calorieGoal) {
@@ -54,6 +66,11 @@ const Dashboard = () => {
     setCaloriesConsumed(caloriesConsumed + meal.calories);
   };
 
+  // Open GoalModal for updating
+  const handleEditGoal = () => {
+    setIsGoalModalOpen(true);
+  };
+
   return (
     <>
     <Header/>
@@ -62,7 +79,7 @@ const Dashboard = () => {
       <Typography variant="h5" gutterBottom>{currentDate}</Typography>
 
       {/* Goal Modal */}
-      <GoalModal open={isGoalModalOpen} onClose={() => setIsGoalModalOpen(false)} onSave={(goal) => setCalorieGoal(goal)} />
+      <GoalModal open={isGoalModalOpen} onClose={() => setIsGoalModalOpen(false)} onSave={handleSaveGoal} />
 
       {/* Add Meal Modal */}
       <AddMealModal open={isAddMealModalOpen} onClose={() => setIsAddMealModalOpen(false)} onAddMeal={handleAddMeal} />
@@ -88,8 +105,11 @@ const Dashboard = () => {
           </Box>
 
           {/* Add Meal Button */}
-          <Button variant="contained" onClick={() => setIsAddMealModalOpen(true)} sx={{ mt: 4 }}>
+          <Button variant="contained" color="success" onClick={() => setIsAddMealModalOpen(true)} sx={{ mt: 4, mr: 4 }}>
             Add Meal
+          </Button>
+          <Button variant="contained" color="primary" onClick={() => setIsGoalModalOpen(true)} sx={{ mt: 4 }}>
+            Update Goal
           </Button>
 
           {/* Meals Table */}
