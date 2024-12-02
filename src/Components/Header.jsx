@@ -23,30 +23,19 @@ const Header = () => {
           CalorieCounter
         </Typography>
 
-        {/* Navigation Links */}
-        <Button color="inherit" component={Link} to="/dashboard">
-          Dashboard
-        </Button>
-
         {/* Account Dropdown */}
         <Button
           color="inherit"
           onClick={handleMenuClick}
           endIcon={<ArrowDropDownIcon />}
         >
-          Account
+          Menu
         </Button>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
-            Profile
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/settings">
-            Settings
-          </MenuItem>
           <MenuItem onClick={handleMenuClose} component={Link} to="/">
             Logout
           </MenuItem>
