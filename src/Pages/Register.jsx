@@ -43,7 +43,6 @@ function Register() {
         username,
         name,
         email,
-        calorie,
         uid: user.uid,
       });
       openSnackbar('Registration successful!', 'success');
