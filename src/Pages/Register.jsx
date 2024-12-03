@@ -55,81 +55,120 @@ function Register() {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.header}>Register</h2>
-      {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={styles.input}
-            required
-          />
+    <div style={styles.outerContainer}>
+      {}
+      <div style={styles.leftSection}>
+        <img
+          src="/src/assets/registerpage.png"
+          alt="Illustration"
+          style={styles.illustration}
+        />
+      </div>
+      <div style={styles.rightSection}> {/* Updated here */}
+          <div style={styles.container}>
+            <h2 style={styles.header}>Register</h2>
+            {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+            <form onSubmit={handleSubmit} style={styles.form}>
+              <div style={styles.inputGroup}>
+                <label>Username:</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  style={styles.input}
+                  required
+                />
+              </div>
+              <div style={styles.inputGroup}>
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  style={styles.input}
+                  required
+                />
+              </div>
+              <div style={styles.inputGroup}>
+                <label>Email:</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={styles.input}
+                  required
+                />
+              </div>
+              <div style={styles.inputGroup}>
+                <label>Password:</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  style={styles.input}
+                  required
+                />
+              </div>
+              <div style={styles.inputGroup}>
+                <label>Confirm Password:</label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  style={styles.input}
+                  required
+                />
+                {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+              </div>
+              <button type="submit" style={styles.button}>
+                Register
+              </button>
+            </form>
+            <p style={styles.footerText}>
+              Already have an account? <Link to="/">Login</Link>
+            </p>
+          </div>
         </div>
-        <div style={styles.inputGroup}>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.inputGroup}>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
-          {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
-        </div>
-        <button type="submit" style={styles.button}>
-          Register
-        </button>
-      </form>
-      <p style={styles.footerText}>
-        Already have an account? <Link to="/">Login</Link>
-      </p>
     </div>
   );
 }
 
 const styles = {
+  outerContainer: {
+    display: "flex",
+    minHeight: "100vh",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  leftSection: {
+    flex: 1,
+    backgroundColor: "#91B70C", 
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    clipPath: "polygon(0 0, 75% 0, 65% 100%, 0% 100%)",
+  },
+  illustration: {
+    maxWidth: "100%",
+    height: "auto",
+  },
+  rightSection: {
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fafafa",
+    padding: "20px",
+  },
   container: {
     maxWidth: "400px",
-    margin: "auto",
+    width: "100%",
     padding: "20px",
     backgroundColor: "#f9f9f9",
     borderRadius: "8px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    textAlign: "center",
+    textAlign: "left",
   },
   header: {
     color: "#1976D2",
@@ -156,9 +195,9 @@ const styles = {
     marginTop: "5px",
   },
   button: {
-    width: "100%",
+    width: "50%",
     padding: "10px",
-    backgroundColor: "#1976D2",
+    backgroundColor: "#91B70C",
     color: "#fff",
     border: "none",
     borderRadius: "4px",
